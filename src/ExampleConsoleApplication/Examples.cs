@@ -17,41 +17,52 @@ namespace TestConsole
     {
         static void Main(string[] args)
         {
+            if (!VirtualTerminalConsole.EnableVirtualTerminalProcessing())
+            {
+                throw new ApplicationException("Unable to enable Virtual Terminal Processing!");
+            }
             // NOTE: Running all of the following examples at once will result in unexpected 
             //       coloring behavior, as more than 16 different colors are used!
 
-            for(int rr = 0; rr < 255; rr+=25)
+            const int inc = 10;
+            var i = 0;
+            for (int rr = 0; rr < 255; rr+= inc)
             {
-                for (int gg=0; gg < 255; gg+= 25)
+                for (int gg=0; gg < 255; gg+= inc)
                 {
-                    for (int bb = 0; bb < 255; bb+= 25)
+                    for (int bb = 0; bb < 255; bb+= inc)
                     {
-                        //VirtualTerminalConsole.SetForegroundColor(Color.Pink);
-                        VirtualTerminalConsole.SetForegroundColor(Color.FromArgb(rr, gg, bb));
-                        Console.Write("*");
+                        Console.Write('\u25a0', Color.FromArgb(rr, gg, bb));
+                        i++;
+                        if (i == Console.BufferWidth)
+                        {
+                            Console.WriteLine();
+                            i = 0;
+                        }
                     }
                 }
             }
 
-            Console.WriteLine("hi", Color.Pink);
-            int r = 225;
-            int g = 255;
-            int b = 250;
-            for (int i = 0; i < 14; i++)
-            {
-                Console.WriteLine(i.ToString(), Color.FromArgb(r, g, b));
+            //int r = 225;
+            //int g = 255;
+            //int b = 250;
+            //for (int i = 0; i < 14; i++)
+            //{
+            //    Console.WriteLine(i.ToString(), Color.FromArgb(r, g, b));
 
-                r -= 10;
-                b -= 10;
-            }
+            //    r -= 10;
+            //    b -= 10;
+            //}
 
-            Console.WriteLine("Press any key for color replacement, and note what happens to \"hi\", above!");
-            Console.ReadKey();
+            Console.WriteLine();
 
-            Console.ReplaceColor(Color.Pink, Color.PaleVioletRed);
+            //Console.WriteLine("Press any key for color replacement, and note what happens to \"hi\", above!");
+            //Console.ReadKey();
 
-            Console.WriteLine("bye", Color.PaleVioletRed);
-            Console.WriteLine("bye", Color.Pink);
+            //Console.ReplaceColor(Color.Pink, Color.PaleVioletRed);
+
+            //Console.WriteLine("bye", Color.PaleVioletRed);
+            //Console.WriteLine("bye", Color.Pink);
 
             //List<int> ints = new List<int>()
             //{

@@ -9,49 +9,31 @@ namespace Colorful
 {
     internal static class OperationSystemDetector
     {
-        private static readonly bool _isAnniversaryUpdate;
-
         static OperationSystemDetector()
         {
             // OS Detection for all CLR implementations (.NET Framework,Mono,.NET Core)
-            var windir = Environment.GetEnvironmentVariable("windir");
-
-            if ((!string.IsNullOrWhiteSpace(windir)) && windir.Contains(@"\") && Directory.Exists(windir))
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // windows
-                int version=NativeMethods.GetVersion();
+                int version = NativeMethods.GetVersion();
                 int major = version & 0xFF;
                 int minor = (version >> 8) & 0xFF;
                 if ((major < 6) || (minor < 2))
                 {
-                    _isAnniversaryUpdate = false;
+                    IsAnniversaryUpdate = false;
                 }
                 else
                 {
                     // Windows 6.2 is Windows 8 or later - first which supports Windows RT
-                    _isAnniversaryUpdate = DetectAnniversaryUpdate();
+                    IsAnniversaryUpdate = DetectAnniversaryUpdate();
                 }
-               
-            }
-            else if (File.Exists("/proc/sys/kernel/ostype"))
-            {
-                string osType = File.ReadAllText(@"/proc/sys/kernel/ostype");
-                if (osType.StartsWith("Linux", StringComparison.OrdinalIgnoreCase))
-                {
-                    // linux
-                }
-            }
-            else if (File.Exists(@"/System/Library/CoreServices/SystemVersion.plist"))
-            {
-                // Mac OS
-            }
 
+            }
+            //else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) { }
+            //else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) { }
         }
 
-        public static bool IsAnniversaryUpdate
-        {
-            get { return _isAnniversaryUpdate; }
-        }
+        public static bool IsAnniversaryUpdate { get; }
 
         /// <summary>
         /// ALL version info functions are DEPRECATED since Windows 10
@@ -59,7 +41,7 @@ namespace Colorful
         /// this code modified version of code:
         /// http://answers.unity3d.com/questions/1249727/detect-if-windows-10-anniversary-version-number.html
         /// </summary>
-        /// <returns></returns>
+        /// <returns>bool</returns>
         private static bool DetectAnniversaryUpdate()
         {
             const string kAppExtensionClassName = "Windows.ApplicationModel.AppExtensions.AppExtensionCatalog";

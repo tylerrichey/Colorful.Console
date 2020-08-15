@@ -6,7 +6,7 @@
     <AssemblyTitle>Colorful.Console Examples</AssemblyTitle>
     <VersionPrefix>1.2</VersionPrefix>
     <Authors>Tom Akita;Muhammad Rehan Saeed;Matt Furden;Drew Noakes;Jamie Gould;Marcos Vinicius Maia;Sergey Korshunov;Adam Schiavone;IGusev;Shreyas Jejurkar</Authors>
-    <TargetFrameworks>netcoreapp2.0;net40;net45;net451;net452;net46;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <AssemblyName>ExampleConsoleApplication</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>ExampleConsoleApplication</PackageId>
@@ -26,36 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Colorful.Console\Colorful.Console.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
 </Project>

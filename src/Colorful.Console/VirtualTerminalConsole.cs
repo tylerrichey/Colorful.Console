@@ -12,19 +12,15 @@ namespace Colorful
     /// </summary>
     public static class VirtualTerminalConsole
     {
-        private static readonly bool _isVirtualTerminalProcessingActive;
         static VirtualTerminalConsole()
         {
             if (OperationSystemDetector.IsAnniversaryUpdate)
             {
-                _isVirtualTerminalProcessingActive = EnableVirtualTerminalProcessing();
+                IsActive = EnableVirtualTerminalProcessing();
             }
         }
 
-        public static bool IsActive
-        {
-            get { return _isVirtualTerminalProcessingActive; }
-        }
+        public static bool IsActive { get; }
 
         public static bool EnableVirtualTerminalProcessing()
         {
@@ -33,12 +29,13 @@ namespace Colorful
             NativeMethods.GetConsoleMode(handle, out mode);
             NativeMethods.SetConsoleMode(handle, mode | 0x4);
             NativeMethods.GetConsoleMode(handle, out mode);
+            System.Console.OutputEncoding = Encoding.UTF8;
             return (mode & 0x4) == 0x4;
         }
 
         public static void RestoreForeground()
         {
-            System.Console.Write(VirtualTerminalSequences.RestoreForeground);
+            //System.Console.Write(VirtualTerminalSequences.RestoreForeground);
         }
 
         public static void RestoreBackground()

@@ -40,11 +40,11 @@ namespace Colorful
             Queue.Enqueue(() => Task.Factory.StartNew(() =>
             {
 #endif
-                var oldSystemColor = System.Console.ForegroundColor;
+                
                 int writeCount = 1;
                 foreach (KeyValuePair<string, Color> textChunk in styleMap)
                 {
-                    System.Console.ForegroundColor = colorManager.GetConsoleColor(textChunk.Value);
+                    VirtualTerminalConsole.SetForegroundColor(textChunk.Value);
 
                     if (writeCount == styleMap.Count())
                     {
@@ -58,7 +58,7 @@ namespace Colorful
                     writeCount++;
                 }
 
-                System.Console.ForegroundColor = oldSystemColor;
+                VirtualTerminalConsole.RestoreForeground();
 #if !NET40
             })).Wait();
 #endif
@@ -66,14 +66,14 @@ namespace Colorful
 
         private static void MapToScreen(StyledString styledString, string trailer)
         {
-            var oldSystemColor = System.Console.ForegroundColor;
+            
             int rowLength = styledString.CharacterGeometry.GetLength(0);
             int columnLength = styledString.CharacterGeometry.GetLength(1);
             for (int row = 0; row < rowLength; row++)
             {
                 for (int column = 0; column < columnLength; column++)
                 {
-                    System.Console.ForegroundColor = colorManager.GetConsoleColor(styledString.ColorGeometry[row, column]);
+                    VirtualTerminalConsole.SetForegroundColor(styledString.ColorGeometry[row, column]);
 
                     if (row == rowLength - 1 && column == columnLength - 1)
                     {
@@ -90,15 +90,15 @@ namespace Colorful
                 }
             }
 
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColor<T>(Action<T> action, T target, Color color)
         {
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteChunkInColor(Action<string> action, char[] buffer, int index, int count, Color color)
@@ -112,10 +112,10 @@ namespace Colorful
         {
             Color color = alternator.GetNextColor(target.AsString());
 
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteChunkInColorAlternating(Action<string> action, char[] buffer, int index, int count, ColorAlternator alternator)
@@ -181,10 +181,10 @@ namespace Colorful
 
         private static void WriteInColor<T, U>(Action<T, U> action, T target0, U target1, Color color)
         {
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorAlternating<T, U>(Action<T, U> action, T target0, U target1, ColorAlternator alternator)
@@ -192,10 +192,10 @@ namespace Colorful
             string formatted = string.Format(target0.ToString(), target1.Normalize());
             Color color = alternator.GetNextColor(formatted);
 
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorStyled<T, U>(string trailer, T target0, U target1, StyleSheet styleSheet)
@@ -226,10 +226,10 @@ namespace Colorful
 
         private static void WriteInColor<T, U>(Action<T, U, U> action, T target0, U target1, U target2, Color color)
         {
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1, target2);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorAlternating<T, U>(Action<T, U, U> action, T target0, U target1, U target2, ColorAlternator alternator)
@@ -237,10 +237,10 @@ namespace Colorful
             string formatted = string.Format(target0.ToString(), target1, target2); // NOT FORMATTING
             Color color = alternator.GetNextColor(formatted);
 
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1, target2);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorStyled<T, U>(string trailer, T target0, U target1, U target2, StyleSheet styleSheet)
@@ -271,10 +271,10 @@ namespace Colorful
 
         private static void WriteInColor<T, U>(Action<T, U, U, U> action, T target0, U target1, U target2, U target3, Color color)
         {
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1, target2, target3);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorAlternating<T, U>(Action<T, U, U, U> action, T target0, U target1, U target2, U target3, ColorAlternator alternator)
@@ -282,10 +282,10 @@ namespace Colorful
             string formatted = string.Format(target0.ToString(), target1, target2, target3);
             Color color = alternator.GetNextColor(formatted);
 
-            var oldSystemColor = System.Console.ForegroundColor;
-            System.Console.ForegroundColor = colorManager.GetConsoleColor(color);
+            
+            VirtualTerminalConsole.SetForegroundColor(color);
             action.Invoke(target0, target1, target2, target3);
-            System.Console.ForegroundColor = oldSystemColor;
+            VirtualTerminalConsole.RestoreForeground();
         }
 
         private static void WriteInColorStyled<T, U>(string trailer, T target0, U target1, U target2, U target3, StyleSheet styleSheet)
